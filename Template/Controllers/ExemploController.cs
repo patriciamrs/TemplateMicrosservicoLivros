@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Livros.Servicos;
 using InserirLivros.DTO;
+using Livros.DTO;
 
 
 namespace Livros.Controllers
@@ -67,6 +68,44 @@ namespace Livros.Controllers
             }
         }
 
+
+        // GET /api/livros/{id}
+        [HttpGet("{id}")]
+        public IActionResult GetLivro(int id)
+        {
+            try
+            {
+                var resultado = _livrosDomain.Buscar(id, null, null, null).FirstOrDefault();
+
+                if (resultado == null)
+                    return NotFound("Livro não encontrado");
+
+                return Ok(new VerificarLivroDTO
+                {
+                    Id = resultado.Id,
+                    Disponibilidade = resultado.Disponibilidade
+                });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        // PATCH /api/livros/{id}/status
+        [HttpPatch("{id}/status")]
+        public IActionResult AtualizarStatus(int id, [FromBody] AtualizarStatusLivroDTO dto)
+        {
+            try
+            {
+                _livrosDomain.AtualizarDisponibilidade(id, dto.Disponibilidade);
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
 
 

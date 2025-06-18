@@ -96,6 +96,19 @@ namespace Livros.Servicos
             _dataContext.SaveChanges();
 
         }
+
+        public void AtualizarDisponibilidade(int idLivro, bool novaDisponibilidade)
+        {
+            var livro = _dataContext.Livros.FirstOrDefault(p => p.Id == idLivro);
+
+            if (livro == null)
+                throw new Exception("Livro não encontrado");
+
+            livro.Disponibilidade = novaDisponibilidade;
+            _dataContext.SaveChanges();
+        }
+
     }
+
 }
 
