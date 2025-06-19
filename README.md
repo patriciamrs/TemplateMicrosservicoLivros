@@ -17,7 +17,7 @@ Essa arquitetura em microsserviços permite que cada parte do sistema seja desen
 
 
 
-## 📚 Microsserviço de Livros
+## Microsserviço de Livros
 
 **Funcionalidade:** Gerenciar o cadastro e o status dos livros.
 
@@ -28,7 +28,7 @@ Essa arquitetura em microsserviços permite que cada parte do sistema seja desen
 * Marcar um livro como emprestado.
 * Verificar se um livro está disponível para empréstimo.
 
-## 🔀 Rotas da API 
+## Rotas da API 
 
 
 __1. POST /api/livros/inserirNovo__
