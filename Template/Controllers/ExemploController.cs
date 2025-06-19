@@ -76,9 +76,12 @@ namespace Livros.Controllers
                 if (resultado == null)
                     return NotFound("Livro não encontrado");
 
-                return Ok(new VerificarLivroDTO
+                return Ok(new LivroDTO
                 {
                     Id = resultado.Id,
+                    Nome = resultado.Nome,
+                    Autor = resultado.Autor,
+                    CodigoISBN = resultado.CodigoISBN,
                     Disponibilidade = resultado.Disponibilidade
                 });
             }
@@ -87,6 +90,7 @@ namespace Livros.Controllers
                 return BadRequest(e.Message);
             }
         }
+
 
         // PATCH: api/livros/{id}/status
         [HttpPatch("{id}/status")]
