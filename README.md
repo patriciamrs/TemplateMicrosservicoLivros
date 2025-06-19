@@ -45,8 +45,11 @@ Busca livros já cadastrados no sistema, a busca pode ser feita pelo id, nome do
 
 __4. PATCH {id}/status__
 
-Verifica se o livro buscado(id) está disponível para empréstimo.
+Altera o status do livro para empréstimo.
 
+__5. GET /api/livros/buscarLivro/{id}__
+
+Verifica se o livro buscado está disponível para empréstimo.
 
 
 
