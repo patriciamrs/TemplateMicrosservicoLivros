@@ -2,14 +2,11 @@
 using Livros.DTO;
 using Template.Infra;
 
-
-
-
 namespace Livros.Servicos
 {
     public class LivrosDomain
     {
-        private DataContext _dataContext;
+        private readonly DataContext _dataContext;
 
         public LivrosDomain()
         {
@@ -18,25 +15,25 @@ namespace Livros.Servicos
 
         public void Inserir(InserirLivros.DTO.InserirLivroDTO dadosDaInsercao)
         {
-            var livro = new Livro();
-
-            livro.Id = dadosDaInsercao.Id;
-            livro.Nome = dadosDaInsercao.Nome;
-            livro.Autor = dadosDaInsercao.Autor;
-            livro.Descricao = dadosDaInsercao.Descricao;
-            livro.CodigoISBN = dadosDaInsercao.CodigoISBN;
-            livro.Disponibilidade = true;
-
-            if ((livro.Nome == "") || (livro.CodigoISBN == ""))
+            var livro = new Livro
             {
-                throw new Exception("Falta informar o nome e/ou Código ISBN do livro. ");
+                Id = dadosDaInsercao.Id,
+                Nome = dadosDaInsercao.Nome,
+                Autor = dadosDaInsercao.Autor,
+                Descricao = dadosDaInsercao.Descricao,
+                CodigoISBN = dadosDaInsercao.CodigoISBN,
+                Disponibilidade = true
+            };
+
+            if (string.IsNullOrWhiteSpace(livro.Nome) || string.IsNullOrWhiteSpace(livro.CodigoISBN))
+            {
+                throw new Exception("Falta informar o nome e/ou Código ISBN do livro.");
             }
 
-            _dataContext.Add(livro);
+            _dataContext.Livros.Add(livro);
             _dataContext.SaveChanges();
-
-
         }
+
         public void Alterar(int id, AlterarLivroDTO dadosAlteracao)
         {
             var livro = _dataContext.Livros.FirstOrDefault(p => p.Id == id);
@@ -45,31 +42,30 @@ namespace Livros.Servicos
             {
                 throw new Exception("Livro não encontrado");
             }
+
+            livro.Nome = dadosAlteracao.Nome;
+            livro.Autor = dadosAlteracao.Autor;
+            livro.Descricao = dadosAlteracao.Descricao;
+            livro.CodigoISBN = dadosAlteracao.CodigoISBN;
+
+            _dataContext.SaveChanges();
         }
 
-        public List<LivroDTO> Buscar(int? Id, string Autor = null, string Nome = null, string CodigoISBN = null)
+        public List<LivroDTO> Buscar(int? Id, string Nome = null, string Autor = null, string CodigoISBN = null)
         {
             var query = _dataContext.Livros.AsQueryable();
 
-            if (Id != null)
-            {
-                query = query.Where(p => p.Id == Id);
-            }
-
-            if (!string.IsNullOrEmpty(Autor))
-            {
-                query = query.Where(p => p.Autor.Contains(Autor));
-            }
+            if (Id.HasValue)
+                query = query.Where(p => p.Id == Id.Value);
 
             if (!string.IsNullOrWhiteSpace(Nome))
-            {
-                query = query.Where(p => p.Nome.Contains(Nome));
-            }
+                query = query.Where(p => p.Nome.ToLower().Contains(Nome.ToLower()));
+
+            if (!string.IsNullOrWhiteSpace(Autor))
+                query = query.Where(p => p.Autor.ToLower().Contains(Autor.ToLower()));
 
             if (!string.IsNullOrWhiteSpace(CodigoISBN))
-            {
-                query = query.Where(p => p.CodigoISBN.Contains(CodigoISBN));
-            }
+                query = query.Where(p => p.CodigoISBN.ToLower().Contains(CodigoISBN.ToLower()));
 
             var livros = query.ToList();
 
@@ -82,19 +78,16 @@ namespace Livros.Servicos
                 Disponibilidade = p.Disponibilidade
             }).ToList();
         }
-        public void ExcluirLivro(int id) //ta certo???
+
+        public void ExcluirLivro(int id)
         {
             var livro = _dataContext.Livros.FirstOrDefault(p => p.Id == id);
 
             if (livro == null)
-            {
                 throw new Exception("Livro não encontrado");
-            }
 
             livro.Disponibilidade = false;
-
             _dataContext.SaveChanges();
-
         }
 
         public void AtualizarDisponibilidade(int idLivro, bool novaDisponibilidade)
@@ -107,8 +100,5 @@ namespace Livros.Servicos
             livro.Disponibilidade = novaDisponibilidade;
             _dataContext.SaveChanges();
         }
-
     }
-
 }
-

@@ -3,7 +3,6 @@ using Livros.Servicos;
 using InserirLivros.DTO;
 using Livros.DTO;
 
-
 namespace Livros.Controllers
 {
     [Route("api/livros")]
@@ -17,15 +16,14 @@ namespace Livros.Controllers
             _livrosDomain = new LivrosDomain();
         }
 
-        [Route("/api/livros/inserirNovo")]
-        [HttpPost]
+        // POST: api/livros/inserirNovo
+        [HttpPost("inserirNovo")]
         public IActionResult Inserir([FromBody] InserirLivroDTO dadosDaInsercao)
         {
             try
             {
                 _livrosDomain.Inserir(dadosDaInsercao);
-
-                return Ok("Livro inserido com sucesso. ");
+                return Ok("Livro inserido com sucesso.");
             }
             catch (Exception e)
             {
@@ -33,9 +31,8 @@ namespace Livros.Controllers
             }
         }
 
-        [Route("/api/livros/excluirLivro/{id}")]
-        [HttpDelete]
-
+        // DELETE: api/livros/excluirLivro/{id}
+        [HttpDelete("excluirLivro/{id}")]
         public IActionResult Excluir(int id)
         {
             try
@@ -48,19 +45,19 @@ namespace Livros.Controllers
                 return BadRequest(e.Message);
             }
         }
-        [Route("/api/livros/buscarLivro")]
-        [HttpGet]
+
+        // GET: api/livros/buscarLivro?id=1&Nome=...
+        [HttpGet("buscarLivro")]
         public IActionResult Buscar(int? id, string? Nome, string? Autor, string? codigoISBN)
         {
             try
             {
                 var resultado = _livrosDomain.Buscar(id, Nome, Autor, codigoISBN);
-                
+
                 if (resultado == null || !resultado.Any())
                     return NotFound("Nenhum livro encontrado!");
 
                 return Ok(resultado);
-
             }
             catch (Exception e)
             {
@@ -68,8 +65,7 @@ namespace Livros.Controllers
             }
         }
 
-
-        
+        // GET: api/livros/{id}
         [HttpGet("{id}")]
         public IActionResult GetLivro(int id)
         {
@@ -92,7 +88,7 @@ namespace Livros.Controllers
             }
         }
 
-        
+        // PATCH: api/livros/{id}/status
         [HttpPatch("{id}/status")]
         public IActionResult AtualizarStatus(int id, [FromBody] AtualizarStatusLivroDTO dto)
         {
@@ -106,8 +102,5 @@ namespace Livros.Controllers
                 return BadRequest(e.Message);
             }
         }
-
-
-
     }
 }
