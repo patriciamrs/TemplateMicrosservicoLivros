@@ -17,7 +17,7 @@ namespace Livros.Controllers
             _livrosDomain = new LivrosDomain();
         }
 
-        [Route("/api/livros/inserirNovo/{id}")]
+        [Route("/api/livros/inserirNovo")]
         [HttpPost]
         public IActionResult Inserir([FromBody] InserirLivroDTO dadosDaInsercao)
         {
@@ -48,9 +48,9 @@ namespace Livros.Controllers
                 return BadRequest(e.Message);
             }
         }
-        [Route("/api/livros/buscarLivro/{id}")]
+        [Route("/api/livros/buscarLivro")]
         [HttpGet]
-        public IActionResult Buscar(int? id, string Nome, string Autor, string codigoISBN)
+        public IActionResult Buscar(int? id, string? Nome, string? Autor, string? codigoISBN)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace Livros.Controllers
         }
 
 
-        // GET /api/livros/{id}
+        
         [HttpGet("{id}")]
         public IActionResult GetLivro(int id)
         {
@@ -92,7 +92,7 @@ namespace Livros.Controllers
             }
         }
 
-        // PATCH /api/livros/{id}/status
+        
         [HttpPatch("{id}/status")]
         public IActionResult AtualizarStatus(int id, [FromBody] AtualizarStatusLivroDTO dto)
         {
