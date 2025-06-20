@@ -41,7 +41,7 @@ Exclui livros já cadastrados, buscando pelo id para evitar erros.
 
 __3. GET /api/livros/buscarLivro__
 
-Busca livros já cadastrados no sistema, a busca pode ser feita pelo id, nome do livro, autor e código ISBN.
+Busca livros já cadastrados no sistema, a busca pode ser feita pelo id, nome do livro, autor e/ou código ISBN.
 
 __4. PATCH {id}/status__
 
